@@ -2,29 +2,29 @@ const express =require("express");
 const {connectDb}=require("./config/database")
 const User=require("./models/user")
 
+const {validationvalue}=require("./utills/validation")
+ const bcrypt =require("bcrypt")
+ const validator=require("validator");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const { userauth } = require("./middlewares/auth");
+const authRouter = require("./Router/auth");
+const profileRouter = require("./Router/profile");
+const requestRouter = require("./Router/request");
+
+
 
  const app=express();
+ app.use(express.json());
+ app.use(cookieParser())
+
+ app.use("/",authRouter);
+ app.use("/",profileRouter);
+ app.use("/",requestRouter);
+
  
 
-  app.post("/signup",async (req,res)=>{
-      
-      const obj={
-         firstName:"harsh",
-         lastName:"mishra",
-         emailId:"abc@gmail.com",
-
-      };
-       const user=new User(obj); // creating a new instance of the user model
-      try{
-         await user.save();
-         console.log("hiiii")
-         res.send("user created successfully")
-      }
-      catch(err){
-         res.status(400).send("error while saving this to db")
-      }
-     
-  })
+  
   
   connectDb ()
   .then(()=>{
