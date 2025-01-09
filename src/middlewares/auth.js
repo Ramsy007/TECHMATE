@@ -18,10 +18,17 @@ const userauth= async(req,res,next)=>{
    try{
        const cookies=req.cookies;
        const {token}=cookies;
-       const decodedata= await jwt.verify(token,"abcdef");
-       if(!decodedata){
-          throw new Error("token is not valid");
+       if (!token) {
+         return res.status(401).send("Please Login!");
        }
+   
+      //  console.log("hii");
+       const decodedata= await jwt.verify(token,"abcdef");
+       console.log(decodedata);
+      //  console.log("hii");
+      //  if(!decodedata){
+      //     return res.status(401).send("please login")
+      //  }
        const {_id}=decodedata;
        const user=await User.findById(_id);
        req.user=user;
@@ -29,7 +36,7 @@ const userauth= async(req,res,next)=>{
 
    }
    catch(err){
-        res.send("somthing went wrong"+err.message);
+        res.send("somthing wenttt wrong"+err.message);
    }
 }
 module.exports={

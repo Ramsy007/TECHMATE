@@ -14,7 +14,7 @@ const validator=require("validator")
     
  }
  const validateprofileedit=(req)=>{
-    const allowedFields=["firstName","lastName","emailId","gender","age","about","skills"];
+    const allowedFields=["firstName","lastName","emailId","gender","age","about","skills","photoUrl"];
     const isallowed= Object.keys(req.body).every((field)=>allowedFields.includes(field));
     return isallowed;
  }

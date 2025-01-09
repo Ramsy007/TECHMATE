@@ -43,6 +43,15 @@ const bcrypt=require("bcrypt");
         type:[String],
 
     },
+    photoUrl: {
+        type: String,
+        default: "https://geographyandyou.com/images/user-profile.png",
+        validate(value) {
+          if (!validator.isURL(value)) {
+            throw new Error("Invalid Photo URL: " + value);
+          }
+        },
+      },
     about:{
          type:String,
          default:"this is about section"
@@ -50,11 +59,12 @@ const bcrypt=require("bcrypt");
  },{ timestamps: true });
   userSchema.methods.getJWT=async function(){
      const user=this;
-     const token=jwt.sign({_id:this._id},"abcdef",{expiresIn:"7d",});
+     const token=jwt.sign({_id:this._id,firstName:this.firstName},"abcdef",{expiresIn:"7d",});
       return token;
   };
    userSchema.methods.validatepassword=async function(passwordInput){
        const user=this;
+         
        const passwordhash=user.password;
        const ispassword= await bcrypt.compare(passwordInput,passwordhash);
        return ispassword;

@@ -13,7 +13,7 @@
      res.send("error while login" + err.message);
  }
  })
- profileRouter.patch("/profile/edit",userauth,async(req,res)=>{
+ profileRouter.put("/profile/edit",userauth,async(req,res)=>{
     try{
         if(!validateprofileedit(req)){
              throw new  Error("only mandatory fields are editable")
@@ -21,13 +21,16 @@
         const loggedInuser=req.user;
         Object.keys(req.body).forEach((key)=>(loggedInuser[key]=(req.body[key])))
         loggedInuser.save();
-        res.send("user updated successfully")
+        res.json({
+          message: `${loggedInuser.firstName}, your profile updated successfuly`,
+          data: loggedInuser,
+        });
        
 
     }
-    catch(err){
-     res.send("error while login" + err.message);
- }
+    catch (err) {
+      res.status(400).send("ERROR : " + err.message);
+    }
  })
 
  module.exports=profileRouter
